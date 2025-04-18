@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Calculator</title>
+</head>
+<body>
+    <h1>Gross to Net Salary Calculator</h1>
+    <input type="number" id="gross-salary" placeholder="Enter gross salary">
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <script>
+        async function calculate() {
+            const gross = parseFloat(document.getElementById("gross-salary").value);
+            const res = await fetch('/calculate-net', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gross })
+            });
+            const data = await res.json();
+            document.getElementById("result").innerHTML = `
+                <p><strong>Gross:</strong> ${data.gross}</p>
+                <p>BHXH (8%): ${data.bhxh}</p>
+                <p>BHYT (1.5%): ${data.bhyt}</p>
+                <p>BHTN (1%): ${data.bhtn}</p>
+                <p><strong>Insurance total:</strong> ${data.insurance_total}</p>
+                <p><strong>Tax:</strong> ${data.tax}</p>
+                <p><strong>Net salary:</strong> ${data.net}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
